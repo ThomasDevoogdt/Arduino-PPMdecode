@@ -18,7 +18,7 @@ void setup() {
 
 void loop(){
 	//Alles wat in de hoofd-lus staat is louter bedoeld om visueel de kanalen zichtbaar te maken. 
-	Serial.print("one: ");
+	Serial.print("ONE: ");
 	for (int i; i < channelsA; i++){
 
 		int tmpA = myPPMdecodeA.channel[i];
