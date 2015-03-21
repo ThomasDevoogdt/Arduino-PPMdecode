@@ -32,7 +32,7 @@ void PPMdecode::init()
 	synchronized = false;
 	lastMs = 0;
 	makeReference();
-	attachInterrupt(_pin, rereffer, RISING);
+	attachInterrupt(_pin, rerefer, RISING);
 }
 void PPMdecode::makeReference()
 {
@@ -44,7 +44,7 @@ void PPMdecode::makeReference()
 Interrupt function
 ********************************************************************************/
 
-static void rereffer(){
+static void rerefer(){
 	for (short i = 0; i < reference; i++){
 		(*dr[i]).PWMstore();
 	}

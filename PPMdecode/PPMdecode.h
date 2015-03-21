@@ -40,7 +40,7 @@ Static
 //copy of instances (needed for interrupts)
 
 static PPMdecode(*dr[99]); //Don't modify directly
-static void rereffer();
+static void rerefer();
 static short reference = 0;
 
 #endif
