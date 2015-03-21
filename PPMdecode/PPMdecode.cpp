@@ -1,6 +1,6 @@
 /********************************************************************************
 PPMdecode.h - Library for PPM decoding.
-Created by Thomas D. , 2015.
+Created by Thomas D. & David D. , 2015.
 With special thanks to Eddy Caron.
 Released into the public domain.
 ********************************************************************************/
@@ -21,33 +21,16 @@ PPMdecode::PPMdecode(short pin, short channels)
 {
 	_pin = pin;
 	_channels = channels;
-	init();
-}
-void PPMdecode::init()
-{
+
 	for (short i = 0; i < _channels; i++)
 	{
 		channel[i] = initValue;
 	}
-	synchronized = false;
 	lastMs = 0;
-	makeReference();
-	attachInterrupt(_pin, rerefer, RISING);
-}
-void PPMdecode::makeReference()
-{
+
 	dr[reference] = this;
+	attachInterrupt(_pin, voidList[reference], RISING);
 	reference++;
-}
-
-/********************************************************************************
-Interrupt function
-********************************************************************************/
-
-static void rerefer(){
-	for (short i = 0; i < reference; i++){
-		(*dr[i]).PWMstore();
-	}
 }
 
 void PPMdecode::PWMstore(){
@@ -58,7 +41,7 @@ void PPMdecode::PWMstore(){
 		synchronized = true;
 
 	}
-	else  if (synchronized && (currentChannel <= _channels) && (diffMs > minPuls) && (diffMs < maxPuls))
+	else  if (synchronized && (currentChannel < (_channels + 1)) && (diffMs > minPuls) && (diffMs < maxPuls))
 	{
 		channel[currentChannel] = map(diffMs, minPuls, maxPuls, 0, 100);
 		currentChannel++;
@@ -70,3 +53,14 @@ void PPMdecode::PWMstore(){
 	}
 	lastMs = nowMs;
 }
+
+/********************************************************************************
+Interrupt function
+********************************************************************************/
+static void update0(){ (*dr[0]).PWMstore(); }//I hate doing this, but the attachInterrupt needs this.
+static void update1(){ (*dr[1]).PWMstore(); }
+static void update2(){ (*dr[2]).PWMstore(); }
+static void update3(){ (*dr[3]).PWMstore(); }
+static void update4(){ (*dr[4]).PWMstore(); }
+static void update5(){ (*dr[5]).PWMstore(); }
+

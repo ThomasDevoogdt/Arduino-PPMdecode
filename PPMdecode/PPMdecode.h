@@ -1,6 +1,6 @@
 /********************************************************************************
 PPMdecode.h - Library for PPM decoding.
-Created by Thomas D. , 2015.
+Created by Thomas D. & David D. , 2015.
 With special thanks to Eddy Caron.
 Released into the public domain.
 ********************************************************************************/
@@ -9,6 +9,7 @@ Released into the public domain.
 #define PPMdecode_h
 #include "Arduino.h"
 
+#define maxPPMread 6
 #define maxChannel 20
 
 /********************************************************************************
@@ -21,14 +22,12 @@ public:
 	PPMdecode(short pin, short channels);
 	boolean synchronized;
 	void PWMstore();
-	long channel[maxChannel];
+	short channel[maxChannel];
 
 private:
-	short _pin, _channels;
-	void makeReference();
-	void init();
-	boolean state;
-	long nowMs, lastMs, diffMs;
+	short _pin, _channels;;
+	long nowMs, lastMs; 
+	int diffMs;
 	short currentChannel;
 };
 
@@ -39,8 +38,10 @@ Static
 //Please, dont use in your arduino sketch, this is static.
 //copy of instances (needed for interrupts)
 
-static PPMdecode(*dr[99]); //Don't modify directly
-static void rerefer();
+//I hate doing this, but the attachInterrupt needs this.
+static PPMdecode(*dr[maxPPMread]);
+static void update0(), update1(), update2(), update3(), update4(), update5();
+static void(*voidList[maxPPMread])() = { update0, update1, update2, update3, update4, update5 };
 static short reference = 0;
 
 #endif
