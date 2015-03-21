@@ -4,8 +4,8 @@ int interA = 0; //Let op! int.0 staat verbonden op !pin 2! zie: http://arduino.c
 int interB = 1; //Let op! int.1 staat verbonden op !pin 3! zie: http://arduino.cc/en/Reference/attachInterrupt .
 int channelsA = 6; //In te stellen op het aantal in te lezen kanalen.
 int channelsB = 6; //In te stellen op het aantal in te lezen kanalen.
-PPMdecode myPPMdecodeA = PPMdecode(interA, channelsA); //Aanmaken van een nieuw object. Voorlopig kun je er nog geen meerdere aanmaken.
-PPMdecode myPPMdecodeB = PPMdecode(interB, channelsB);
+PPMdecode myPPMdecodeA = PPMdecode(interA, channelsA); //Aanmaken van een nieuw object. 
+PPMdecode myPPMdecodeB = PPMdecode(interB, channelsB); //Aanmaken van een nieuw object. 
 /*
 Mogelijkheden om op te roepen:
 class.channel[i]; met i het gewenste kanaal.
