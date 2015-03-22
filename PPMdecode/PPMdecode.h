@@ -7,7 +7,14 @@ Released into the public domain.
 
 #ifndef PPMdecode_h
 #define PPMdecode_h
-#include "Arduino.h"
+
+//#include "Arduino.h"
+
+#if defined(ARDUINO) && ARDUINO >= 100
+#include <Arduino.h>
+#else
+#include <WProgram.h>
+#endif
 
 #define maxPPMread 6
 #define maxChannel 20
