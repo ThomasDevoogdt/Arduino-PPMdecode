@@ -30,6 +30,7 @@ public:
 	boolean synchronized;
 	void PWMstore();
 	short channel[maxChannel];
+	boolean error;
 
 private:
 	short _pin, _channels;;

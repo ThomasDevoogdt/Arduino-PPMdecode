@@ -8,10 +8,11 @@ Released into the public domain.
 #include "Arduino.h"
 #include "PPMdecode.h"
 
-#define minPuls 1000 //탎
-#define maxPuls 2000 //탎
-#define initTime 5000 //탎
-#define initValue 50 //%
+#define minPuls 1000		//탎
+#define maxPuls 2000		//탎
+#define maxSafeOffset 200	//탎
+#define initTime 5000		//탎
+#define initValue 50		//%
 
 /********************************************************************************
 Setup
@@ -21,6 +22,7 @@ PPMdecode::PPMdecode(short pin, short channels)
 {
 	_pin = pin;
 	_channels = channels;
+	error = false;
 
 	for (short i = 0; i < _channels; i++)
 	{
@@ -39,14 +41,26 @@ void PPMdecode::PWMstore(){
 	if ((lastMs > 0) && (diffMs > initTime)){
 		currentChannel = 0;
 		synchronized = true;
-
+		error = false;
 	}
 	else  if (synchronized && (currentChannel < (_channels + 1)) && (diffMs > minPuls) && (diffMs < maxPuls))
 	{
-		channel[currentChannel] = map(diffMs, minPuls, maxPuls, 0, 100);
-		currentChannel++;
+		channel[currentChannel] = map(diffMs, minPuls, maxPuls, 0, 100);	
 	}
-	if (currentChannel == (_channels + 1))
+	else if (synchronized && (currentChannel < (_channels + 1)) && !((diffMs > minPuls - maxSafeOffset) && (diffMs < maxPuls + maxSafeOffset))) 
+	{
+		error = true;
+		currentChannel = 0;
+		synchronized = false;
+
+		for (short i = 0; i < _channels; i++)
+		{
+			channel[i] = initValue;
+		}
+	}
+	currentChannel++;
+
+	if (currentChannel > _channels) //(currentChannel == (_channels + 1))
 	{
 		currentChannel = 0;
 		synchronized = false;
