@@ -28,12 +28,14 @@ class PPMdecode
 public:
 	PPMdecode(short pin, short channels);
 	boolean synchronized;
-	void PWMstore();
+	void PWMstore(); //Please do not use!
+	void SetDefaultValues(short defaultValue[maxChannel]);
 	short channel[maxChannel];
 	boolean error;
 
 private:
-	short _pin, _channels;;
+	short _pin, _channels;
+	short _defaultValue[maxChannel];
 	long nowMs, lastMs; 
 	int diffMs;
 	short currentChannel;

@@ -26,13 +26,22 @@ PPMdecode::PPMdecode(short pin, short channels)
 
 	for (short i = 0; i < _channels; i++)
 	{
-		channel[i] = initValue;
+		_defaultValue[i] = initValue;
+		channel[i] = _defaultValue[i];
 	}
 	lastMs = 0;
 
 	dr[reference] = this;
 	attachInterrupt(_pin, voidList[reference], RISING);
 	reference++;
+}
+
+void PPMdecode::SetDefaultValues(short defaultValue[maxChannel])
+{
+	for (short i = 0; i < _channels; i++)
+	{
+		_defaultValue[i] = defaultValue[i];
+	}
 }
 
 void PPMdecode::PWMstore(){
@@ -55,7 +64,7 @@ void PPMdecode::PWMstore(){
 
 		for (short i = 0; i < _channels; i++)
 		{
-			channel[i] = initValue;
+			channel[i] = _defaultValue[i];
 		}
 	}
 	else if(!synchronized && currentChannel > 10){ //Maximum Failed Attempts
@@ -63,7 +72,7 @@ void PPMdecode::PWMstore(){
 		currentChannel = 0;
 		for (short i = 0; i < _channels; i++)
 		{
-			channel[i] = initValue;
+			channel[i] = _defaultValue[i];
 		}
 	}
 	
