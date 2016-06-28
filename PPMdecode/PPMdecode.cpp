@@ -39,7 +39,7 @@ void PPMdecode::PWMstore(){
 	nowMs = micros();
 	diffMs = nowMs - lastMs;
 	if ((lastMs > 0) && (diffMs > initTime)){
-		currentChannel = 0;
+		currentChannel = -1;
 		synchronized = true;
 		error = false;
 	}
@@ -58,9 +58,18 @@ void PPMdecode::PWMstore(){
 			channel[i] = initValue;
 		}
 	}
+	else if(!synchronized && currentChannel > 10){ //Maximum Failed Attempts
+		error = true;
+		currentChannel = 0;
+		for (short i = 0; i < _channels; i++)
+		{
+			channel[i] = initValue;
+		}
+	}
+	
 	currentChannel++;
 
-	if (currentChannel > _channels) //(currentChannel == (_channels + 1))
+	if (synchronized && currentChannel > _channels) //(currentChannel == (_channels + 1))
 	{
 		currentChannel = 0;
 		synchronized = false;
